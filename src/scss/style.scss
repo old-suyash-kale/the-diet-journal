@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700');
+
+// overide bootstrap here;
+$primary: #482D83;
+$font-family-sans-serif: 'Poppins', sans-serif;
+$enable-rounded: false;
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+
+
+body {
+    background-color: rgb(233, 233, 232);
+    padding-bottom: 37px;
+    @extend .position-relative;
+}
+
+footer {
+    left: 0;
+    bottom: 0;
+    @extend .position-absolute, .bg-primary, .text-light, .small;
+}
+
+
+.input-message {
+    left: 0;
+    bottom: -16px;
+    padding: 2px 4px 2px 6px;
+    @extend .text-danger, .position-absolute, .small, .w-100, .text-truncate;
+}
+
+.no-after::after {
+    display: none;
+}

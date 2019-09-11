@@ -1,0 +1,66 @@
+{
+  "name": "meal-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-regular": "^5.0.13",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.3.1",
+    "cors": "^2.8.5",
+    "css-ripple-effect": "^1.0.5",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "font-awesome": "^4.7.0",
+    "history": "^4.9.0",
+    "jquery": "^3.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.0",
+    "moment": "^2.24.0",
+    "mysql": "^2.16.0",
+    "node-sass": "^4.11.0",
+    "nodemailer": "^6.1.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-fontawesome": "^1.6.1",
+    "react-redux": "^7.0.2",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "react-scripts": "2.1.8",
+    "react-toastify": "^5.0.1",
+    "reactstrap": "^8.0.0",
+    "redux": "^4.0.1",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.3.0",
+    "socket.io": "^2.2.0",
+    "sqlstring": "^2.3.1"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "ui": "react-scripts start",
+    "server": "nodemon server/index.js -e js",
+    "debugger": "nodemon --inspect-brk server/index.js",
+    "build": "react-scripts build"
+  },
+  "_moduleAliases": {
+    "@root": "server/",
+    "@configs": "server/configs/",
+    "@utils": "server/utils/",
+    "@modules": "server/module/"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
