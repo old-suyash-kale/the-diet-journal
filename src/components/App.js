@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { BASE_PATH } from 'configs/index';
-import Routes from 'components/Routes';
+import { BASE_PATH } from 'configs/index.js';
+import Routes from 'components/Routes.jsx';
 
 import 'scss/style.scss';
 
@@ -18,7 +18,7 @@ class App extends Component {
         <ToastContainer
           toastClassName={`toast-container`}
           position={'bottom-center'}
-          autoClose={3000}
+          autoClose={4000}
           hideProgressBar
           newestOnTop={false}
           closeOnClick

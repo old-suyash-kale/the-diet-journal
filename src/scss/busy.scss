@@ -1,0 +1,34 @@
+.busy {
+    min-height: $progress-height;
+    @extend .position-relative;
+}
+
+$progress-height: 2px;
+.progress-animation {
+    height: $progress-height;
+    @extend .position-relative, .overflow-hidden;
+    .progress-bar {
+        height: $progress-height;
+        top: 0;
+        width: 40%;
+        animation-name: ProgressAnimation;
+        animation-duration: 1.4s;
+        animation-delay: 0s;
+        animation-fill-mode: none;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        @extend .position-absolute, .bg-primary;
+    }
+}
+@keyframes ProgressAnimation {
+	0% {
+		left: -100%;
+	}
+	100% {
+		left: 100%;
+	}
+}
+
+.filter-blur {
+    filter: blur(2px) grayscale(1);
+}

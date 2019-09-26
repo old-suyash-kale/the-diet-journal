@@ -1,19 +1,13 @@
 import $ from 'jquery';
 import { toast } from 'react-toastify';
 
+import store from 'utils/store';
+import history from 'utils/history';
 import { BASE_URL, TOKEN_KEY } from 'configs/index';
 import { defaultProps } from 'utils/index';
 
-class Services {
-    constructor(props) {
-        this.props = props;
-
-        this.success = this.success.bind(this);
-        this.error = this.error.bind(this);
-        this.toServer = this.toServer.bind(this);
-    };
-
-    toParams(o) {
+export default {
+    toParams: function(o) {
         let s = '';
         for (var k in o) {
             let v = o[k];
@@ -23,9 +17,8 @@ class Services {
             }
         }
         return s;
-    };
-
-    success(o) {
+    },
+    success: function(o) {
         let {s, m} = o;
         m = m ? m.join(', ') : false;
         if (s === 'e') {
@@ -35,27 +28,27 @@ class Services {
             if (s === 's') {
                 tconfig.type = toast.TYPE.SUCCESS;
             } else if (s === 'w') {
-                tconfig.type = toast.TYPE.WARNING;
+                tconfig.type = toast.TYPE.ERROR;
             }
             toast(m, tconfig);
         }
-    };
-
-    error(o) {
-        window.location.href = window.location.origin + '/#/Error/' + (o && o.m ? o.m.join(', ') : '');
-    };
-
-    toServer(props) {
+    },
+    error: function(o) {
+        history.push(`/Error/${(o && o.m ? o.m.join(', ') : '')}`);
+    },
+    toServer: function(props) {
         props = defaultProps(props, {async: true, type: 'GET', contentType: 'application/json', dataType: 'json'});
         let { url, async, type, contentType, dataType, data } = props,
-            headers = {};
-        if (this.oUser && this.oUser.token) {
-            headers[TOKEN_KEY] = this.oUser.token;
+            headers = {},
+            { user } = store.getState();
+        if (user && user.token) {
+            headers[TOKEN_KEY] = user.token;
         }
         if (type === 'GET' && data) {
             url += this.toParams(data);
             data = undefined;
         }
+        data['platform'] = 1;
         if (data) {
             data = JSON.stringify(data);
         }
@@ -69,9 +62,7 @@ class Services {
             dataType,
             data
         });
-        req.then(this.success, this.error);
+        req.then(this.success.bind(this), this.error.bind(this));
         return req;
-    };
+    }
 };
-
-export default Services;

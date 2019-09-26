@@ -1,20 +1,20 @@
 import $ from 'jquery';
-import React, {Component} from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
 
-import store from 'utils/store';
-import history from 'utils/history';
+import store from 'utils/store.js';
+import history from 'utils/history.js';
 
-import PrivateRoute from 'components/Common/PrivateRoute';
+import PrivateRoute from 'components/Common/PrivateRoute.jsx';
 
-import Header from 'components/Common/Header';
-import Footer from 'components/Common/Footer';
+import Header from 'components/Common/Header.jsx';
+import Footer from 'components/Common/Footer.jsx';
+import Error from 'components/Error/index.jsx'
 
-import SignUp from 'components/SignUp/';
-import SignIn from 'components/SignIn/';
-import Dashboard from 'components/Dashboard/';
+import SignUp from 'components/SignUp/index.jsx';
+import SignIn from 'components/SignIn/index.jsx';
+import Dashboard from 'components/Dashboard/index.jsx';
 
 class Routes extends Component {
 	render() {
@@ -23,7 +23,7 @@ class Routes extends Component {
 			'min-height': window.innerHeight + 'px'
 		});
 		return(
-			<ConnectedRouter
+			<Router
 				store={store}
 				history={history}>
 				<div
@@ -46,13 +46,37 @@ class Routes extends Component {
 
 								<Route
 									path={'/SignIn'}
-									render={(props)=> (<SignIn {...props} user={user} />)}
+									render={(props)=> {
+										if (user) {
+											return (<Redirect to={'/'} />);
+										} else {
+											return (<SignIn {...props} user={user} />);
+										}
+									}}
 									exact={true}
 								/>
 
 								<Route
 									path={'/SignUp'}
-									render={(props)=> (<SignUp {...props} user={user} />)}
+									render={(props)=> {
+										if (user) {
+											return (<Redirect to={'/'} />);
+										} else {
+											return (<SignUp {...props} user={user} />);
+										}
+									}}
+									exact={true}
+								/>
+
+								<Route
+									path={'/Error'}
+									render={(props)=> (<Error {...props} user={user} />)}
+									exact={true}
+								/>
+
+								<Route
+									path={'/Error/:Message'}
+									render={(props)=> (<Error {...props} user={user} />)}
 									exact={true}
 								/>
 
@@ -63,7 +87,7 @@ class Routes extends Component {
 					<Footer user={user} />
 
 				</div>
-			</ConnectedRouter>
+			</Router>
 		);
 	};
 };

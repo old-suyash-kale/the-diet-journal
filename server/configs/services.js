@@ -2,7 +2,7 @@ let { oUser } = require('@modules/User');
 
 module.exports = {
     SignUp: {
-        get: {
+        post: {
             connection: true,
             auth: false,
             expect: {
@@ -29,7 +29,7 @@ module.exports = {
         }
     },
     SignIn: {
-        get: {
+        post: {
             connection: true,
             auth: false,
             expect: {

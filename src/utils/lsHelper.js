@@ -1,6 +1,6 @@
 const ITEM = 'iREA-POC',
 	DEFAULT_PROPS = {
-		'DOMAIN': ''
+		'remember': false
 	};
 
 function get() {

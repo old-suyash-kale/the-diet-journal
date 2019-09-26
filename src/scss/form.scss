@@ -1,0 +1,6 @@
+.input-message {
+    left: 0;
+    bottom: -16px;
+    padding: 2px 4px 2px 6px;
+    @extend .text-danger, .position-absolute, .small, .w-100, .text-truncate;
+}

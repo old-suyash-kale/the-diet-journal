@@ -226,7 +226,7 @@ class User {
                 if (dUser.mobile == mobile) {
                     m.push('Mobile is already registered!')
                 }
-                res.errorToUi({ m });
+                res.warningToUi({ m });
             } else { // no duplicates;
                 hash({ password }) // hasing password for security;
                 .then((hPassword)=> { // hashed password;
@@ -244,8 +244,8 @@ class User {
                             values: { user_id, role, dt }
                         }]).then(()=> {
                             this.oUser = { user_id, fname, lname, email, mobile, platform, role: [role], email_verified: 0, mobile_verified: 0};
-                            this.send_mobile_code();
-                            this.send_email_code();
+                            // this.send_mobile_code();
+                            // this.send_email_code();
                             this.signIn(res);
                         },(err)=> { // error in user_details/ user_role query;
                             res.errorToUi({m: [err]});
@@ -297,7 +297,7 @@ class User {
                     res.errorToUi({m: [err]});
                 });
             } else { // email/ mobile invalid;
-                res.warningToUi({m: [`${username} is not registered!`]});
+                res.warningToUi({m: [`${mobile} is not registered!`]});
             }
         },(err)=> {
             res.errorToUi({m: [err]});

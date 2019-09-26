@@ -1,0 +1,7 @@
+input.form-control:focus {
+    box-shadow: none;
+}
+
+.no-after::after {
+    display: none;
+}

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 
 import { removeAdditionalProps, anythingToArray } from 'utils/';
 
+
 class Input extends Component {
 	render() {
 		let { props } = this,
-			{ Busy, InputWrapper, InputWrapperProps, Error, ErrorProps } = props,
+			{ Busy, InputWrapper, InputWrapperProps, Error, ErrorProps, preRender } = props,
 			InputProps = removeAdditionalProps(props, oPropTypes);
 		if (Busy) {
 			InputProps.disabled = true;
@@ -16,11 +17,13 @@ class Input extends Component {
 		if (Error) {
 			InputProps.className = [...anythingToArray(InputProps.className), 'border-danger'].join(' ');
 		}
+		ErrorProps.className = [...anythingToArray(ErrorProps.className), 'input-message'].join(' ');
 		InputWrapper = InputWrapper.filter((c)=> { return c; }).join(' ');
 		return(
 			<div
 				className={InputWrapper}
 				{...InputWrapperProps}>
+				{preRender}
 				<input
 					{...InputProps}
 				/>
@@ -39,6 +42,7 @@ const oPropTypes = {
 	InputWrapperProps: PropTypes.object,
 	Error: PropTypes.any,
 	ErrorProps: PropTypes.object,
+	preRender: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.node]),
 	Type: PropTypes.string,
 	Required: PropTypes.bool,
 	RequiredMessage: PropTypes.string,
@@ -47,7 +51,20 @@ const oPropTypes = {
 	NoSpace: PropTypes.bool,
 	NoSpaceMessage: PropTypes.string,
 	NoSpecialCharacter: PropTypes.bool,
-	NoSpecialCharacterMessage: PropTypes.string
+	NoSpecialCharacterMessage: PropTypes.string,
+
+	Min: PropTypes.number,
+	MinMessage: PropTypes.string,
+	Max: PropTypes.number,
+	MaxMessage: PropTypes.string,
+	MinLength: PropTypes.number,
+	MinLengthMessage: PropTypes.string,
+	MaxLength: PropTypes.number,
+	MaxLengthMessage: PropTypes.string,
+	Pattern: PropTypes.any,
+	PatternMessage: PropTypes.string,
+	CustomPromise: PropTypes.func
+
 };
 
 Input.propTypes = oPropTypes;
@@ -57,9 +74,8 @@ Input.defaultProps = {
 	Busy: false,
 	InputWrapper: 'form-group',
 	className: 'form-control',
-	ErrorProps: {
-		className: 'input-message'
-	},
+	ErrorProps: {},
+	preRender: null,
 	Type: 'Input',
 	Required: false,
 	NoSpace: false,

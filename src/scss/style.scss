@@ -4,9 +4,12 @@
 $primary: #482D83;
 $font-family-sans-serif: 'Poppins', sans-serif;
 $enable-rounded: false;
+$font-weight-base: lighter;
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
+$rt-color-default: $primary;
+$rt-color-error: $danger;
 
 body {
     background-color: rgb(233, 233, 232);
@@ -14,20 +17,9 @@ body {
     @extend .position-relative;
 }
 
-footer {
-    left: 0;
-    bottom: 0;
-    @extend .position-absolute, .bg-primary, .text-light, .small;
-}
-
-
-.input-message {
-    left: 0;
-    bottom: -16px;
-    padding: 2px 4px 2px 6px;
-    @extend .text-danger, .position-absolute, .small, .w-100, .text-truncate;
-}
-
-.no-after::after {
-    display: none;
-}
+@import
+    '../../node_modules/react-toastify/scss/main.scss',
+    './common.scss',
+    './footer.scss',
+    './form.scss',
+    './busy.scss';
