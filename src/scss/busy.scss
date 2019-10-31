@@ -30,5 +30,7 @@ $progress-height: 2px;
 }
 
 .filter-blur {
+    transition: all 100ms;
+    transform: scale(0.99);
     filter: blur(2px) grayscale(1);
 }

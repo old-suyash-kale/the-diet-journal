@@ -1,0 +1,30 @@
+.transition-slide-enter {
+    opacity: 0;
+    transform: translateX(-120%);
+}
+.transition-slide-enter-done {
+    transform: translateX(0%);
+    transition: opacity 300ms, transform 300ms;
+};
+.transition-slide-exit-done {
+    transform: translateX(120%);
+    opacity: 0;
+    transition: opacity 300ms, transform 300ms;
+};
+
+.profile-picture-wrapper {
+    @extend .text-center;
+    .profile-picture {
+        width: 222px;
+        height: 222px;
+        border-radius: 222px;
+        background-color: #e2e2e2;
+        @extend .d-inline-block, .shadow;
+        .profile-picture-initials {
+            font-size: 80px;
+            font-weight: 300;
+            line-height: 222px;
+            text-shadow: 2px 1px 6px #444;
+        };
+    };
+};

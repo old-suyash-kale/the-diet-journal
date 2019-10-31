@@ -17,9 +17,40 @@ body {
     @extend .position-relative;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+};
+
+.transition-scale-appear {
+    opacity: 0;
+    transform: scale(0.9);
+};
+.transition-scale-appear-done {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+};
+
+.transition-header-appear {
+    transform: translateY(-56px);
+};
+.transition-header-appear-done {
+    transform: translateY(0px);
+    transition: opacity 300ms, transform 300ms;
+};
+
+.transition-footer-appear {
+    transform: translateY(35px);
+};
+.transition-footer-appear-done {
+    transform: translateY(0px);
+    transition: opacity 300ms, transform 300ms;
+};
+
 @import
     '../../node_modules/react-toastify/scss/main.scss',
     './common.scss',
     './footer.scss',
     './form.scss',
-    './busy.scss';
+    './busy.scss',
+    './components/dashboard.scss';

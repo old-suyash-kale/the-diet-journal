@@ -7,19 +7,17 @@ import { anythingToArray } from 'utils/';
 class Busy extends Component {
     render() {
         let { props } = this,
-            { children, progress, blur, busy, type } = props,
-            className = [...anythingToArray(props.className), 'busy'];
-        if (blur) {
+            { children, progress, blur, busy, Busy, type } = props,
+            className = [...anythingToArray(props.className), 'busy'],
+            isBusy = busy || (type && Busy.includes(type));
+        if (isBusy && blur) {
             className.push('filter-blur');
-        }
-        if (type && busy.indexOf(type) >= 0) {
-            progress = true;
         }
         return(<div
             className={className.join(' ')}>
-            {progress && <div className={'progress-animation'}>
+            {isBusy && progress ? <div className={'progress-animation'}>
                 <div className={'progress-bar'}></div>
-            </div>}
+            </div> : null}
             {Children.map(children, child =>
                 cloneElement(child, {
                     progress: (progress ? 1 : 0),
@@ -38,12 +36,12 @@ Busy.propTypes = {
 
 Busy.defaultProps = {
     progress: false,
-    blur: false
+    blur: true
 };
 
 
 export default connect(({ busy })=> {
 	return {
-		busy
+		Busy: busy
 	};
 })(Busy);

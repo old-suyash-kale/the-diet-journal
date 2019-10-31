@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faPaperPlane } from '@fortawesome/fontawesome-free-solid';
+import { CSSTransition } from 'react-transition-group';
 
 import Button from 'components/Common/Button.jsx';
 import Input from 'components/Common/Input.jsx';
@@ -110,115 +111,125 @@ class SignUp extends Component {
 		return(
 			<div
 				className={'row'}>
-				<Busy
-					blur={false}
-					className={'col-md-4 offset-md-4'}>
-					<div
-						className={'card shadow'}>
+				<CSSTransition
+					classNames={'transition-scale'}
+					in={true}
+					appear={true}
+					mountOnEnter={true}
+					timeout={{
+						appear: 200,
+						enter: 400
+					}}>
+					<Busy
+						type={'USER_SIGNUP'}
+						className={'col-md-4 offset-md-4'}>
 						<div
-							className={'card-body'}>
-							<h4
-								className={'card-title text-primary mb-0'}>
-								<FontAwesomeIcon
-									icon={faUserPlus}
-									className={'mr-2'}
-								/>
-								{'SignUp'}
-							</h4>
-							<small
-								className={'text-muted mb-0'}>
-								{'We promise not to share/ span your contact.'}
-							</small>
-
-							<form
-								onSubmit={onSubmit}
-								noValidate
-								className={'mt-2 pt-3 border-top'}>
-
-								<div
-									className={'form-row'}>
-									<Input
-										{...oForm.fname}
-										InputWrapper={'form-group col-md-6'}
-										placeholder={'First Name'}
-										className={'form-control'}
+							className={'card shadow'}>
+							<div
+								className={'card-body'}>
+								<h4
+									className={'card-title text-primary mb-0'}>
+									<FontAwesomeIcon
+										icon={faUserPlus}
+										className={'mr-2'}
 									/>
-									<Input
-										{...oForm.lname}
-										InputWrapper={'form-group col-md-6'}
-										placeholder={'Last Name'}
-										className={'form-control'}
-									/>
-								</div>
+									{'SignUp'}
+								</h4>
+								<small
+									className={'text-muted mb-0'}>
+									{'We promise not to share/ span your contact.'}
+								</small>
 
-								<Input
-									{...oForm.email}
-									placeholder={'Email Address'}
-									className={'form-control'}
-									ErrorProps={{style: {left: '-5px'}}}
-								/>
+								<form
+									onSubmit={onSubmit}
+									noValidate
+									className={'mt-2 pt-3 border-top'}>
 
-								<div
-									className={'form-group input-group'}>
 									<div
-										className={'input-group-prepend'}>
-										<div
-											className={'input-group-text'}>
-											{'+91'}
-										</div>
+										className={'form-row'}>
+										<Input
+											{...oForm.fname}
+											InputWrapper={'form-group col-md-6'}
+											placeholder={'First Name'}
+											className={'form-control'}
+										/>
+										<Input
+											{...oForm.lname}
+											InputWrapper={'form-group col-md-6'}
+											placeholder={'Last Name'}
+											className={'form-control'}
+										/>
 									</div>
-									<Input
-										{...oForm.mobile}
-										placeholder={'Mobile Number'}
-										className={'form-control'}
-										InputWrapper={''}
-										InputWrapperProps={{
-											style: { flex: '1 1 auto' }
-										}}
-										ErrorProps={{style: {left: '-5px'}}}
-									/>
-								</div>
 
-								<div
-									className={'form-group'}>
 									<Input
-										{...oForm.password}
-										placeholder={'Password'}
+										{...oForm.email}
+										placeholder={'Email Address'}
 										className={'form-control'}
 										ErrorProps={{style: {left: '-5px'}}}
 									/>
-								</div>
 
+									<div
+										className={'form-group input-group'}>
+										<div
+											className={'input-group-prepend'}>
+											<div
+												className={'input-group-text'}>
+												{'+91'}
+											</div>
+										</div>
+										<Input
+											{...oForm.mobile}
+											placeholder={'Mobile Number'}
+											className={'form-control'}
+											InputWrapper={''}
+											InputWrapperProps={{
+												style: { flex: '1 1 auto' }
+											}}
+											ErrorProps={{style: {left: '-5px'}}}
+										/>
+									</div>
 
-								{oForm.password.value.length > oForm.password.MinLength ?
 									<div
 										className={'form-group'}>
 										<Input
-											{...oForm.cPassword}
-											placeholder={'Confirm Password'}
+											{...oForm.password}
+											placeholder={'Password'}
 											className={'form-control'}
 											ErrorProps={{style: {left: '-5px'}}}
 										/>
 									</div>
-								: null}
 
-								<Button
-									className={'btn btn-primary'}
-									type={'submit'}
-									ButtonIcon={faPaperPlane}
-									Busy={false}>
-									{'Join In!'}
-								</Button>
 
-							</form>
+									{oForm.password.value.length > oForm.password.MinLength ?
+										<div
+											className={'form-group'}>
+											<Input
+												{...oForm.cPassword}
+												placeholder={'Confirm Password'}
+												className={'form-control'}
+												ErrorProps={{style: {left: '-5px'}}}
+											/>
+										</div>
+									: null}
+
+									<Button
+										className={'btn btn-primary'}
+										type={'submit'}
+										ButtonIcon={faPaperPlane}
+										type={'USER_SIGNUP'}>
+										{'Join In!'}
+									</Button>
+
+								</form>
+							</div>
 						</div>
-					</div>
-					<Link
-						className={'d-block w-100 my-3 text-center'}
-						to={'/SignIn'}>
-						{'Already have an Account? Sign in here!'}
-					</Link>
-				</Busy>
+						<Link
+							className={'d-block w-100 my-3 text-center'}
+							to={'/SignIn'}>
+							{'Already have an Account? Sign in here!'}
+						</Link>
+					</Busy>
+				</CSSTransition>
 			</div>
 		);
 	};
