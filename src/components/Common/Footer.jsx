@@ -9,7 +9,10 @@ class Footer extends Component {
 				in={true}
 				appear={true}
 				mountOnEnter={true}
-				timeout={100}>
+				timeout={{
+					appear: 0,
+					enter: 100
+				}}>
 				<footer
 					className={'container-fluid'}>
 					<div

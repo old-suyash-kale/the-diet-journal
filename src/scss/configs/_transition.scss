@@ -1,0 +1,9 @@
+$transition-duration-ms: 300;
+$transition-function: linear;
+$transition-delay-ms: 200;
+
+:export {
+    duration: $transition-duration-ms;
+    function: $transition-function;
+    delay: $transition-delay-ms;
+};

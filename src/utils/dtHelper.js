@@ -1,5 +1,8 @@
 import moment from 'moment';
 
-export default ()=> {
+/**
+ * Current datatime stamp in utc;
+ */
+export function dateTimeNow() {
     return moment().utc().format('YYYY-MM-DD HH:mm:ss');
 };

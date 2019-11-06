@@ -1,8 +1,11 @@
 import $ from 'jquery';
 
-
+/**
+ * handling input validation;
+ * @param {Object} o: input's object from state;
+ */
 function input(o) {
-    return new Promise((done)=> {
+    return new Promise((resolve)=> {
         let {
                 value, type, Type, // generic;
                 Required, RequiredMessage, // for required;
@@ -94,12 +97,18 @@ function input(o) {
         })
         .finally(()=> {
             o.Error = Error.join(', ');
-            done({ o });
+            resolve({ o });
         });
 
     });
 };
 
+/**
+ * handling input change with validation;
+ * @param {String} f: form key field in state;
+ * @param {String} k: key of the input;
+ * @param {String} v: value of the input;
+ */
 function change(f, k, v) {
     return new Promise((resolve, reject)=> {
         let fObj = this.state[f];
@@ -119,6 +128,10 @@ function change(f, k, v) {
     });
 };
 
+/**
+ * handling input validation;
+ * @param {Object} iObj: input's object from state;
+ */
 function handleChange(iObj) {
     let pObj = Promise.resolve();
     if (iObj.Type === 'Input') {
@@ -127,18 +140,22 @@ function handleChange(iObj) {
     return pObj;
 };
 
+/**
+ * handling for submit;
+ * @param {String} f: form key feild in state;
+ */
 function submit(f) {
     return new Promise((resolve, reject)=> {
         let fObj = this.state[f],
             isError = false,
-            pArr= [];
+            pArr = [];
         if (fObj) {
             fObj = $.extend(true, {}, fObj);
             for (let k in fObj) {
                 let iObj = fObj[k],
                     pObj = handleChange(iObj);
                 pArr.push(pObj);
-                pObj.then((res)=> {
+                pObj.then(res=> {
                     if (res && res.o) {
                         fObj[k] = res.o;
                         if (!isError && res.o.Error) {
@@ -147,18 +164,25 @@ function submit(f) {
                     }
                 })
             };
-            this.setState({ [f]: fObj });
         }
-        Promise.all(pArr).then(()=> {
-            if (isError) {
-                reject();
-            } else {
-                resolve();
-            }
+        Promise.all(pArr)
+        .then(()=> {
+            this.setState({ [f]: fObj },()=> {
+                if (isError) {
+                    reject();
+                } else {
+                    resolve();
+                }
+            });
         });
     });
 };
 
+/**
+ * extracting value of input from form;
+ * @param {String} f: form key field in state;
+ * @param {Array} arr: key of input;
+ */
 function extract(f, arr) {
     let fObj = this.state[f],
         req = {};

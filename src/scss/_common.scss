@@ -1,0 +1,17 @@
+body {
+    background-color: rgb(233, 233, 232);
+    padding-bottom: 37px;
+    @extend .position-relative;
+}
+
+input.form-control:focus {
+    box-shadow: none;
+}
+
+.no-after::after {
+    display: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+};

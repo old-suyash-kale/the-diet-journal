@@ -1,4 +1,4 @@
-import Services from 'services/';
+import Services from 'services/index.js';
 
 function getMealTypes() {
     return new Promise((resolve)=> {

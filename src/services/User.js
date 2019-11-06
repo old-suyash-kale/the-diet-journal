@@ -1,18 +1,18 @@
-import Services from 'services/';
+import Services from 'services/index.js';
 
-function signIn(data) {
+function signIn({ mobile, password }) {
     return Services.toServer({
         url: 'SignIn',
         type: 'POST',
-        data
+        data: { mobile, password }
     });
 };
 
-function signUp(data) {
+function signUp({ fname, lname, mobile, email, password }) {
     return Services.toServer({
         url: 'SignUp',
         type: 'POST',
-        data
+        data: { fname, lname, mobile, email, password }
     });
 };
 

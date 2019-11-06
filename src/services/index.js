@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import { toast } from 'react-toastify';
 
-import store from 'utils/store';
-import history from 'utils/history';
-import { BASE_URL, TOKEN_KEY } from 'configs/index';
-import { defaultProps } from 'utils/index';
+import store from 'utils/store.js';
+import history from 'utils/history.js';
+import { SERVICE_BASE_PATH, JWT_TOKEN_KEY } from 'configs/path.js';
+import defaultProps from 'utils/defaultProps.js';
 
 export default {
     toParams: function(o) {
@@ -42,19 +42,19 @@ export default {
             headers = {},
             { user } = store.getState();
         if (user && user.token) {
-            headers[TOKEN_KEY] = user.token;
+            headers[JWT_TOKEN_KEY] = user.token;
         }
+        data['platform'] = 1;
         if (type === 'GET' && data) {
             url += this.toParams(data);
             data = undefined;
         }
-        data['platform'] = 1;
         if (data) {
             data = JSON.stringify(data);
         }
         let req = $.ajax({
             crossDomain: true,
-            url: BASE_URL + url,
+            url: SERVICE_BASE_PATH + url,
             headers,
             async,
             type,

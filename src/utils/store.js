@@ -4,7 +4,7 @@ import promise from 'redux-promise';
 import thunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
 
-import reducers from 'reducers/index';
+import reducers from 'store/index.js';
 
 const middleware = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose)(applyMiddleware(promise, thunk, routerMiddleware(createBrowserHistory())));
 

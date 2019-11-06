@@ -1,0 +1,7 @@
+const ACTION_BUSY_SHOW = 'SHOW_BUSY';
+const ACTION_BUSY_HIDE = 'HIDE_BUSY';
+
+export {
+    ACTION_BUSY_SHOW,
+    ACTION_BUSY_HIDE
+};

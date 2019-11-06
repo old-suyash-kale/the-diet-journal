@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSync} from '@fortawesome/fontawesome-free-solid';
 
-import {removeAdditionalProps} from 'utils/';
+import removeAdditionalProps from 'utils/removeAdditionalProps.js';
 
 class Button extends Component {
     render() {
@@ -18,10 +18,8 @@ class Button extends Component {
         }
         return (
             <button {...ButtonProps}>
-                {ButtonIcon && !Busy && <FontAwesomeIcon icon={ButtonIcon} className={'mr-2'}/>
-}
-                {Busy && <FontAwesomeIcon icon={faSync} className={'mr-2'} spin={true}/>
-}
+                {ButtonIcon && !Busy && <FontAwesomeIcon icon={ButtonIcon} className={'mr-2'}/>}
+                {Busy && <FontAwesomeIcon icon={faSync} className={'mr-2'} spin={true}/>}
                 {children}
             </button>
         );

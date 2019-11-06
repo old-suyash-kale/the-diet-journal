@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { removeAdditionalProps, anythingToArray } from 'utils/';
-
+import removeAdditionalProps from 'utils/removeAdditionalProps.js';
+import anythingToArray from 'utils/anythingToArray.js';
 
 class Input extends Component {
 	render() {
 		let { props } = this,
-			{ Busy, InputWrapper, InputWrapperProps, Error, ErrorProps, preRender } = props,
+			{ Busy, InputWrapperClassName, InputWrapperProps, Error, ErrorProps, PreRender } = props,
 			InputProps = removeAdditionalProps(props, oPropTypes);
 		if (Busy) {
 			InputProps.disabled = true;
 		}
-		InputWrapper = [InputWrapper];
-		InputWrapper.push('position-relative');
+		InputWrapperClassName = [InputWrapperClassName];
+		InputWrapperClassName.push('position-relative');
 		if (Error) {
 			InputProps.className = [...anythingToArray(InputProps.className), 'border-danger'].join(' ');
 		}
 		ErrorProps.className = [...anythingToArray(ErrorProps.className), 'input-message'].join(' ');
-		InputWrapper = InputWrapper.filter((c)=> { return c; }).join(' ');
+		InputWrapperClassName = InputWrapperClassName.filter((c)=> { return c; }).join(' ');
 		return(
 			<div
-				className={InputWrapper}
+				className={InputWrapperClassName}
 				{...InputWrapperProps}>
-				{preRender}
+				{PreRender}
 				<input
 					{...InputProps}
 				/>
@@ -42,7 +42,7 @@ const oPropTypes = {
 	InputWrapperProps: PropTypes.object,
 	Error: PropTypes.any,
 	ErrorProps: PropTypes.object,
-	preRender: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.node]),
+	PreRender: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.node]),
 	Type: PropTypes.string,
 	Required: PropTypes.bool,
 	RequiredMessage: PropTypes.string,
@@ -75,7 +75,7 @@ Input.defaultProps = {
 	InputWrapper: 'form-group',
 	className: 'form-control',
 	ErrorProps: {},
-	preRender: null,
+	PreRender: null,
 	Type: 'Input',
 	Required: false,
 	NoSpace: false,

@@ -6,22 +6,22 @@ import { connect } from 'react-redux';
 import store from 'utils/store.js';
 import history from 'utils/history.js';
 
-import PrivateRoute from 'components/Common/PrivateRoute.jsx';
+import PrivateRoute from 'components/common/PrivateRoute.jsx';
 
-import Header from 'components/Common/Header.jsx';
-import Footer from 'components/Common/Footer.jsx';
-import Error from 'components/Error/index.jsx'
+import Header from 'components/common/Header.jsx';
+import Footer from 'components/common/Footer.jsx';
+import Error from 'components/error/index.jsx'
 
-import SignUp from 'components/SignUp/index.jsx';
-import SignIn from 'components/SignIn/index.jsx';
-import Dashboard from 'components/Dashboard/index.jsx';
+import SignUp from 'components/signUp/index.jsx';
+import SignIn from 'components/signIn/index.jsx';
+import Dashboard from 'components/dashboard/index.jsx';
 
 class Routes extends Component {
 	render() {
 		let { user } = this.props;
 		$('body').css({
 			'min-height': window.innerHeight + 'px'
-		});
+		});	
 		return(
 			<Router
 				store={store}
@@ -37,6 +37,22 @@ class Routes extends Component {
 							className={'container-fluid'}>
 							<Switch>
 
+								<Route
+									path={'/SignUp'}
+									render={(props)=> {
+										return user ? <Redirect to={'/'} /> : <SignUp {...props} user={user} />;
+									}}
+									exact={true}
+								/>
+
+								<Route
+									path={'/SignIn'}
+									render={(props)=> {
+										return user ? <Redirect to={'/'} /> : <SignIn {...props} user={user} />;
+									}}
+									exact={true}
+								/>
+								
 								<PrivateRoute
 									path={'/'}
 									component={Dashboard}
@@ -45,37 +61,7 @@ class Routes extends Component {
 								/>
 
 								<Route
-									path={'/SignIn'}
-									render={(props)=> {
-										if (user) {
-											return (<Redirect to={'/'} />);
-										} else {
-											return (<SignIn {...props} user={user} />);
-										}
-									}}
-									exact={true}
-								/>
-
-								<Route
-									path={'/SignUp'}
-									render={(props)=> {
-										if (user) {
-											return (<Redirect to={'/'} />);
-										} else {
-											return (<SignUp {...props} user={user} />);
-										}
-									}}
-									exact={true}
-								/>
-
-								<Route
-									path={'/Error'}
-									render={(props)=> (<Error {...props} user={user} />)}
-									exact={true}
-								/>
-
-								<Route
-									path={'/Error/:Message'}
+									path={'/Error/:Message?'}
 									render={(props)=> (<Error {...props} user={user} />)}
 									exact={true}
 								/>

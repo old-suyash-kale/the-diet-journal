@@ -1,0 +1,7 @@
+.transition-header-appear {
+    transform: translateY(-56px);
+};
+.transition-header-appear-done {
+    transform: translateY(0px);
+    transition: opacity 300ms, transform 300ms;
+};

@@ -1,56 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,700');
-
-// overide bootstrap here;
-$primary: #482D83;
-$font-family-sans-serif: 'Poppins', sans-serif;
-$enable-rounded: false;
-$font-weight-base: lighter;
-
-@import '../../node_modules/bootstrap/scss/bootstrap.scss';
-
-$rt-color-default: $primary;
-$rt-color-error: $danger;
-
-body {
-    background-color: rgb(233, 233, 232);
-    padding-bottom: 37px;
-    @extend .position-relative;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-};
-
-.transition-scale-appear {
-    opacity: 0;
-    transform: scale(0.9);
-};
-.transition-scale-appear-done {
-    opacity: 1;
-    transform: translateX(0);
-    transition: opacity 300ms, transform 300ms;
-};
-
-.transition-header-appear {
-    transform: translateY(-56px);
-};
-.transition-header-appear-done {
-    transform: translateY(0px);
-    transition: opacity 300ms, transform 300ms;
-};
-
-.transition-footer-appear {
-    transform: translateY(35px);
-};
-.transition-footer-appear-done {
-    transform: translateY(0px);
-    transition: opacity 300ms, transform 300ms;
-};
-
 @import
-    '../../node_modules/react-toastify/scss/main.scss',
-    './common.scss',
-    './footer.scss',
-    './form.scss',
-    './busy.scss',
-    './components/dashboard.scss';
+    './configs/_index.scss',
+    './_bootstrap.scss',
+    './_common.scss',
+    './_react-toastify.scss',
+    './transition/_index.scss',
+    './components/_index.scss';

@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faUserPlus, faCog, faSignOutAlt } from '@fortawesome/fontawesome-free-solid';
 import { CSSTransition } from 'react-transition-group';
 
-import { signOut } from 'actions/user/index.js';
+import { signOut } from 'store/user/actions.js';
 
 class Header extends Component {
 	render() {
-		let { user } = this.props;
+		let { user, signOut } = this.props;
 		return(
 			<CSSTransition
 				classNames={'transition-header'}
@@ -18,7 +18,7 @@ class Header extends Component {
 				mountOnEnter={true}
 				timeout={{
 					appear: 0,
-					enter: 200
+					enter: 100
 				}}>
 				<nav
 					className={'navbar navbar-expand-lg navbar-primary bg-primary text-light shadow-sm mb-3'}>
@@ -81,7 +81,7 @@ class Header extends Component {
 										<div
 											className={'dropdown-menu dropdown-menu-right p-0'}>
 											<button
-												onClick={this.props.signOut}
+												onClick={signOut}
 												type={'button'}
 												className={'btn btn-default btn-block text-left'}>
 												<FontAwesomeIcon

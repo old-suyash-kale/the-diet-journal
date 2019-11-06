@@ -2,7 +2,7 @@ import React, { Component, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { anythingToArray } from 'utils/';
+import anythingToArray from 'utils/anythingToArray.js';
 
 class Busy extends Component {
     render() {

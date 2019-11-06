@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { BASE_PATH } from 'configs/index.js';
+import { ROUTER_BASE_PATH } from 'configs/path.js';
 import Routes from 'components/Routes.jsx';
 
 import 'scss/style.scss';
@@ -13,7 +13,7 @@ class App extends Component {
   render() {
     return (
       <Router
-        basename={BASE_PATH}>
+        basename={ROUTER_BASE_PATH}>
         <Routes />
         <ToastContainer
           toastClassName={`toast-container`}

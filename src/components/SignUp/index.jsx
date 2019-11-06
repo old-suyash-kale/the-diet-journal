@@ -6,108 +6,110 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faPaperPlane } from '@fortawesome/fontawesome-free-solid';
 import { CSSTransition } from 'react-transition-group';
 
-import Button from 'components/Common/Button.jsx';
-import Input from 'components/Common/Input.jsx';
-import Busy from 'components/Common/Busy.jsx';
+import { change, submit, extract } from 'utils/form.js';
+import { signUp } from 'store/user/actions.js';
+import { TIMEOUT } from 'configs/transition.js';
 
-import { change, submit, extract } from 'utils/Form.js';
-import { signUp } from 'actions/user/index.js';
+import Button from 'components/common/Button.jsx';
+import Input from 'components/common/Input.jsx';
+import Busy from 'components/common/Busy.jsx';
+
+const SIGN_UP_FORM_KEY = 'oForm';
 
 class SignUp extends Component {
-	constructor(props) {
-		super(props);
-		this.change = change.bind(this);
-		this.state = {
-			oForm: {
-				fname: {
-					Type: 'Input',
-					type: 'text',
-					value: 'Suyash',
-					required: true,
-					NoSpace: true,
-					NoSpecialCharacter: true,
-					MinLength: 2,
-					MaxLength: 20,
-					onChange: ({ target })=> {
-						this.change('oForm', 'fname', target.value);
-					}
+	state = {
+		[SIGN_UP_FORM_KEY]: {
+			fname: {
+				Type: 'Input',
+				type: 'text',
+				value: 'Suyash',
+				required: true,
+				NoSpace: true,
+				NoSpecialCharacter: true,
+				MinLength: 2,
+				MaxLength: 20,
+				onChange: ({ target: {value} })=> {
+					change.call(this, SIGN_UP_FORM_KEY, 'fname', value);
+				}
+			},
+			lname: {
+				Type: 'Input',
+				type: 'text',
+				value: 'Kale',
+				NoSpace: true,
+				NoSpecialCharacter: true,
+				MinLength: 2,
+				MaxLength: 20,
+				onChange: ({ target: {value} })=> {
+					change(SIGN_UP_FORM_KEY, 'lname', value);
+				}
+			},
+			mobile: {
+				Type: 'Input',
+				type: 'number',
+				value: '8889644426',
+				required: true,
+				Pattern: /^[0-9]{10,10}$/,
+				PatternMessage: 'Mobile number not valid.',
+				onChange: ({ target: {value} })=> {
+					change.call(this, SIGN_UP_FORM_KEY, 'mobile', value);
+				}
+			},
+			email: {
+				Type: 'Input',
+				type: 'email',
+				value: 'master.suyashkale@gmail.com',
+				onChange: ({ target: {value} })=> {
+					change.call(this, SIGN_UP_FORM_KEY, 'email', value);
+				}
+			},
+			password: {
+				Type: 'Input',
+				type: 'password',
+				value: 'suyash',
+				required: true,
+				MinLength: 4,
+				MaxLength: 40,
+				onChange: ({ target: {value} })=> {
+					change.call(this, SIGN_UP_FORM_KEY, 'password', value);
+				}
+			},
+			cPassword: {
+				Type: 'Input',
+				type: 'password',
+				value: 'suyash',
+				required: true,
+				CustomPromise: ({ value })=> {
+					return new Promise((resolve, reject)=> {
+						let { password } = this.state[SIGN_UP_FORM_KEY];
+						if (value === password.value) {
+							resolve();
+						} else {
+							reject('Password not matching.');
+						}
+					});
 				},
-				lname: {
-					Type: 'Input',
-					type: 'text',
-					value: 'Kale',
-					NoSpace: true,
-					NoSpecialCharacter: true,
-					MinLength: 2,
-					MaxLength: 20,
-					onChange: ({ target })=> {
-						this.change('oForm', 'lname', target.value);
-					}
-				},
-				mobile: {
-					Type: 'Input',
-					type: 'number',
-					value: '8889644426',
-					required: true,
-					Pattern: /^[0-9]{10,10}$/,
-					PatternMessage: 'Mobile number not valid.',
-					onChange: ({ target })=> {
-						this.change('oForm', 'mobile', target.value);
-					}
-				},
-				email: {
-					Type: 'Input',
-					type: 'email',
-					value: 'master.suyashkale@gmail.com',
-					onChange: ({ target })=> {
-						this.change('oForm', 'email', target.value);
-					}
-				},
-				password: {
-					Type: 'Input',
-					type: 'password',
-					value: 'suyash',
-					required: true,
-					MinLength: 4,
-					MaxLength: 40,
-					onChange: ({ target })=> {
-						this.change('oForm', 'password', target.value);
-					}
-				},
-				cPassword: {
-					Type: 'Input',
-					type: 'password',
-					value: 'suyash',
-					required: true,
-					CustomPromise: ({ value })=> {
-						return new Promise((resolve, reject)=> {
-							let { password } = this.state.oForm;
-							if (value === password.value) {
-								resolve();
-							} else {
-								reject('Password not matching.');
-							}
-						});
-					},
-					onChange: ({ target })=> {
-						this.change('oForm', 'cPassword', target.value);
-					}
+				onChange: ({ target: {value} })=> {
+					change.call(this, SIGN_UP_FORM_KEY, 'cPassword', value);
 				}
 			}
-		};
+		}
 	};
+	/**
+	 * handling signin form submit;
+	 */
 	onSubmit = (e)=> {
 		e.preventDefault();
-		submit.call(this, 'oForm')
+		submit.call(this, SIGN_UP_FORM_KEY)
 		.then(()=> {
-			this.props.signUp(extract.call(this, 'oForm', ['fname', 'lname', 'mobile', 'email', 'password']))
+			this.props.signUp(extract.call(this, SIGN_UP_FORM_KEY, ['fname', 'lname', 'mobile', 'email', 'password']))
 		}, ()=> {
 			toast.error(`Please validate.`);
 		});
 	};
 	render() {
 		let { state, onSubmit } = this,
-			{ oForm } = state;
+			{ [SIGN_UP_FORM_KEY]: signUpForm } = state;
 		return(
 			<div
 				className={'row'}>
@@ -116,10 +118,7 @@ class SignUp extends Component {
 					in={true}
 					appear={true}
 					mountOnEnter={true}
-					timeout={{
-						appear: 200,
-						enter: 400
-					}}>
+					timeout={TIMEOUT}>
 					<Busy
 						type={'USER_SIGNUP'}
 						className={'col-md-4 offset-md-4'}>
@@ -148,25 +147,28 @@ class SignUp extends Component {
 									<div
 										className={'form-row'}>
 										<Input
-											{...oForm.fname}
-											InputWrapper={'form-group col-md-6'}
+											{...signUpForm.fname}
+											InputWrapperClassName={'form-group col-md-6 pr-2'}
 											placeholder={'First Name'}
 											className={'form-control'}
 										/>
 										<Input
-											{...oForm.lname}
-											InputWrapper={'form-group col-md-6'}
+											{...signUpForm.lname}
+											InputWrapperClassName={'form-group col-md-6 pl-2'}
 											placeholder={'Last Name'}
 											className={'form-control'}
 										/>
 									</div>
 
-									<Input
-										{...oForm.email}
-										placeholder={'Email Address'}
-										className={'form-control'}
-										ErrorProps={{style: {left: '-5px'}}}
-									/>
+									<div
+										className={'form-group'}>
+										<Input
+											{...signUpForm.email}
+											placeholder={'Email Address'}
+											className={'form-control'}
+											ErrorProps={{style: {left: '-5px'}}}
+										/>
+									</div>
 
 									<div
 										className={'form-group input-group'}>
@@ -178,10 +180,9 @@ class SignUp extends Component {
 											</div>
 										</div>
 										<Input
-											{...oForm.mobile}
+											{...signUpForm.mobile}
 											placeholder={'Mobile Number'}
 											className={'form-control'}
-											InputWrapper={''}
 											InputWrapperProps={{
 												style: { flex: '1 1 auto' }
 											}}
@@ -192,7 +193,7 @@ class SignUp extends Component {
 									<div
 										className={'form-group'}>
 										<Input
-											{...oForm.password}
+											{...signUpForm.password}
 											placeholder={'Password'}
 											className={'form-control'}
 											ErrorProps={{style: {left: '-5px'}}}
@@ -200,11 +201,11 @@ class SignUp extends Component {
 									</div>
 
 
-									{oForm.password.value.length > oForm.password.MinLength ?
+									{signUpForm.password.value.length > signUpForm.password.MinLength ?
 										<div
 											className={'form-group'}>
 											<Input
-												{...oForm.cPassword}
+												{...signUpForm.cPassword}
 												placeholder={'Confirm Password'}
 												className={'form-control'}
 												ErrorProps={{style: {left: '-5px'}}}

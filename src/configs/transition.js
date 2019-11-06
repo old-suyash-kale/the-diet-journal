@@ -1,7 +1,12 @@
-const TIMEOUT = {
-    appear: 200,
-    enter: 400,
-    exit: 200
-};
+import { duration, delay } from 'scss/configs/_transition.scss';
 
-export {TIMEOUT};
+const DURATION = parseInt(duration);
+const DELAY = parseInt(delay);
+
+const TIMEOUT = { appear: DURATION, enter: DURATION, exit: DELAY }; // default timeout for react transition;
+
+export {
+    DURATION,
+    DELAY,
+    TIMEOUT
+};
