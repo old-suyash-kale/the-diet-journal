@@ -78,7 +78,7 @@ class SignIn extends Component {
 							<div
 								className={'card-body'}>
 								<h4
-									className={'card-title text-primary mb-0'}>
+									className={'card-title text-primary mb-0 text-shadow'}>
 									<FontAwesomeIcon
 										icon={faSignInAlt}
 										className={'mr-2'}
@@ -138,7 +138,7 @@ class SignIn extends Component {
 							</div>
 						</div>
 						<Link
-							className={'d-block w-100 my-3 text-center'}
+							className={'d-block w-100 my-3 text-center text-shadow'}
 							to={'/SignUp'}>
 							{`Don't have an Account yet? Join in here!`}
 						</Link>

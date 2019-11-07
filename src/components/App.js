@@ -17,7 +17,7 @@ class App extends Component {
         <Routes />
         <ToastContainer
           toastClassName={`toast-container`}
-          position={'bottom-center'}
+          position={'top-center'}
           autoClose={4000}
           hideProgressBar
           newestOnTop={false}

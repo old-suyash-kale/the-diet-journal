@@ -15,3 +15,14 @@ input.form-control:focus {
 .cursor-pointer {
     cursor: pointer;
 };
+
+.btn {
+    @extend .shadow;
+    &:hover {
+        @extend .shadow-sm;
+    }
+}
+
+.text-shadow {
+    text-shadow: 1px 1px 1px #cccccc;
+}

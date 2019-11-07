@@ -1,4 +1,31 @@
 $rt-color-default: $primary;
 $rt-color-error: $danger;
 
+.Toastify__toast--error,
+.Toastify__toast--error button {
+    color: #856404 !important;
+}
+.Toastify__toast--error {
+    background-color: #fff3cd !important;
+    border: solid 1px #ffeeba !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    border-radius: 0 !important;
+}
+
+
+.Toastify__toast-container .Toastify__toast {
+    margin-top: 5px !important;
+    margin-bottom: 0;
+}
+.Toastify__toast-container .Toastify__toast:first-child {
+    margin-top: 40px !important;
+}
+.Toastify__toast-body {
+    @extend .mt-0, .mb-0;
+}
+.Toastify__toast {
+    min-height: 0px !important;
+    padding: 8px 10px !important;
+}
+
 @import '../../node_modules/react-toastify/scss/main.scss';
