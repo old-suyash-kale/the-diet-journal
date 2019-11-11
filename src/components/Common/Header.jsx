@@ -21,7 +21,7 @@ class Header extends Component {
 					enter: 100
 				}}>
 				<nav
-					className={'navbar navbar-expand-lg navbar-primary bg-primary text-light shadow-sm mb-3'}>
+					className={'app-header navbar navbar-expand-lg navbar-primary bg-primary text-light mb-3'}>
 					<Link
 						to={'/'}
 						className={'navbar-brand text-white'}>

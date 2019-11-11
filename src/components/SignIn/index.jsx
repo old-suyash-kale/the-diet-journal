@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignInAlt, faPaperPlane } from '@fortawesome/fontawesome-free-solid';
+import { faSignInAlt, faPaperPlane, faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid';
 import { CSSTransition } from 'react-transition-group';
 
 import { change, submit, extract } from 'utils/form.js';
@@ -44,6 +45,7 @@ class SignIn extends Component {
 			}
 		}
 	};
+
 	/**
 	 * handling signin form submit;
 	 */
@@ -58,8 +60,18 @@ class SignIn extends Component {
 			toast.error(`Please validate.`);
 		});
 	};
+
+	/**
+	 * handling password's input type change;
+	 */
+	onChangePasswordType = ()=> {
+		let oForm = $.extend(true, {}, this.state[SIGN_IN_FORM_KEY]);
+		oForm.password.type = oForm.password.type === 'password' ? 'text' : 'password';
+		this.setState({[SIGN_IN_FORM_KEY]: oForm});
+	};
+	
 	render() {
-		let { state, onSubmit } = this,
+		let { state, onSubmit, onChangePasswordType } = this,
 			{ [SIGN_IN_FORM_KEY]: signInForm } = state;
 		return(
 			<div
@@ -90,10 +102,12 @@ class SignIn extends Component {
 									{'We promise not to share/ span your contact.'}
 								</small>
 
+								<div className={'divider mt-2'}></div>
+
 								<form
 									onSubmit={onSubmit}
 									noValidate
-									className={'mt-2 pt-3 border-top'}>
+									className={'pt-3'}>
 
 									<div
 										className={'form-group input-group'}>
@@ -108,7 +122,7 @@ class SignIn extends Component {
 											{...signInForm.mobile}
 											placeholder={'Mobile Number'}
 											className={'form-control'}
-											InputWrapper={''}
+											InputWrapperClassName={''}
 											InputWrapperProps={{
 												style: { flex: '1 1 auto' }
 											}}
@@ -123,6 +137,7 @@ class SignIn extends Component {
 											placeholder={'Password'}
 											className={'form-control'}
 											ErrorProps={{style: {left: '-5px'}}}
+											PostRender={<FontAwesomeIcon icon={signInForm.password.type === 'password' ? faEye : faEyeSlash} className={'input-icon cursor-pointer text-muted'} onClick={onChangePasswordType} />}
 										/>
 									</div>
 

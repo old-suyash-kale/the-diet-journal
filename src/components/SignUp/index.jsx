@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faPaperPlane } from '@fortawesome/fontawesome-free-solid';
+import { faUserPlus, faPaperPlane, faEye, faEyeSlash } from '@fortawesome/fontawesome-free-solid';
 import { CSSTransition } from 'react-transition-group';
 
 import { change, submit, extract } from 'utils/form.js';
@@ -66,7 +67,7 @@ class SignUp extends Component {
 			password: {
 				Type: 'Input',
 				type: 'password',
-				value: 'suyash',
+				value: '',
 				required: true,
 				MinLength: 4,
 				MaxLength: 40,
@@ -77,7 +78,7 @@ class SignUp extends Component {
 			cPassword: {
 				Type: 'Input',
 				type: 'password',
-				value: 'suyash',
+				value: '',
 				required: true,
 				CustomPromise: ({ value })=> {
 					return new Promise((resolve, reject)=> {
@@ -95,6 +96,7 @@ class SignUp extends Component {
 			}
 		}
 	};
+
 	/**
 	 * handling signin form submit;
 	 */
@@ -107,8 +109,18 @@ class SignUp extends Component {
 			toast.error(`Please validate.`);
 		});
 	};
+
+	/**
+	 * handling password's input type change;
+	 */
+	onChangePasswordType = ()=> {
+		let oForm = $.extend(true, {}, this.state[SIGN_UP_FORM_KEY]);
+		oForm.cPassword.type = oForm.password.type = oForm.password.type === 'password' ? 'text' : 'password';
+		this.setState({[SIGN_UP_FORM_KEY]: oForm});
+	};
+
 	render() {
-		let { state, onSubmit } = this,
+		let { state, onSubmit, onChangePasswordType } = this,
 			{ [SIGN_UP_FORM_KEY]: signUpForm } = state;
 		return(
 			<div
@@ -183,6 +195,7 @@ class SignUp extends Component {
 											{...signUpForm.mobile}
 											placeholder={'Mobile Number'}
 											className={'form-control'}
+											InputWrapperClassName={''}
 											InputWrapperProps={{
 												style: { flex: '1 1 auto' }
 											}}
@@ -197,11 +210,12 @@ class SignUp extends Component {
 											placeholder={'Password'}
 											className={'form-control'}
 											ErrorProps={{style: {left: '-5px'}}}
+											PostRender={<FontAwesomeIcon icon={signUpForm.password.type === 'password' ? faEye : faEyeSlash} className={'input-icon cursor-pointer text-muted'} onClick={onChangePasswordType} />}
 										/>
 									</div>
 
 
-									{signUpForm.password.value.length > signUpForm.password.MinLength ?
+									{signUpForm.password.value.length && !signUpForm.password.Error ?
 										<div
 											className={'form-group'}>
 											<Input

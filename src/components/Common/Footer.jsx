@@ -14,7 +14,7 @@ class Footer extends Component {
 					enter: 100
 				}}>
 				<footer
-					className={'container-fluid'}>
+					className={'container-fluid app-footer'}>
 					<div
 						className={'row'}>
 						<div

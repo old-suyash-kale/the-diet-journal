@@ -7,7 +7,7 @@ import anythingToArray from 'utils/anythingToArray.js';
 class Input extends Component {
 	render() {
 		let { props } = this,
-			{ Busy, InputWrapperClassName, InputWrapperProps, Error, ErrorProps, PreRender } = props,
+			{ Busy, InputWrapperClassName, InputWrapperProps, Error, ErrorProps, PreRender, PostRender } = props,
 			InputProps = removeAdditionalProps(props, oPropTypes);
 		if (Busy) {
 			InputProps.disabled = true;
@@ -27,6 +27,7 @@ class Input extends Component {
 				<input
 					{...InputProps}
 				/>
+				{PostRender}
 				{Error &&
 					<div {...ErrorProps}>{Error}</div>
 				}
@@ -38,11 +39,12 @@ class Input extends Component {
 
 const oPropTypes = {
 	Busy: PropTypes.bool,
-	InputWrapper: PropTypes.string,
+	InputWrapperClassName: PropTypes.string,
 	InputWrapperProps: PropTypes.object,
 	Error: PropTypes.any,
 	ErrorProps: PropTypes.object,
 	PreRender: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.node]),
+	PostRender: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.node]),
 	Type: PropTypes.string,
 	Required: PropTypes.bool,
 	RequiredMessage: PropTypes.string,
@@ -72,10 +74,11 @@ Input.propTypes = oPropTypes;
 Input.defaultProps = {
 	InputWrapperProps: {},
 	Busy: false,
-	InputWrapper: 'form-group',
+	InputWrapperClassName: 'form-group',
 	className: 'form-control',
 	ErrorProps: {},
 	PreRender: null,
+	PostRender: null,
 	Type: 'Input',
 	Required: false,
 	NoSpace: false,
