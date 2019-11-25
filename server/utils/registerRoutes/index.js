@@ -1,56 +1,36 @@
-const services = require('@configs/services');
-const { default_middleware } = require('@utils/registerRoutes/default_middleware');
-let { oMySql } = require('@modules/MySql');
-let { oUser } = require('@modules/User');
+let services = require('@configs/services.js');
+let oParams = require('@utils/registerRoutes/middlewares/oParams.js');
+let toUi = require('@utils/registerRoutes/middlewares/toUi.js');
+let log_api = require('@utils/registerRoutes/middlewares/log_api.js');
+let validation = require('@utils/registerRoutes/middlewares/validation.js');
+let connection = require('@utils/registerRoutes/middlewares/connection.js');
+let auth = require('@utils/registerRoutes/middlewares/auth.js');
+let role = require('@utils/registerRoutes/middlewares/role.js');
 
-function registerRoutes({ app, BASE_URL }) {
-	for (let k in services) {
-		let url = `${BASE_URL}/${k}`;
-		let types = services[k];
-		for (let type in types) {
-			let props = types[type];
-			registerRoute({ app, url, type, props });
-		};
-	};
-};
-
+/**
+ * handling regestration for api endpoint;
+ * @param {Object}: {app: ExpressApp, url: '*', type: 'get/put/post/delete'}
+ */
 function registerRoute({ app, url, type, props }) {
-	let rArr = [url];
-	let { connection, auth, roles, expect, execute } = props;
+	let rArr = [
+			url, // endpoint url;
+			oParams.bind(this, props),
+			toUi,
+			connection,
+			log_api,
+			validation.bind(this, props)
+		],
+		{ execute } = props;
 
-	rArr.push((req, res, next)=> { // default middleware;
-		default_middleware(req, res, next, props); // registering default output methods; adding 'oParams'; validation;
-	});
-
-	if (connection) { // db connection middleware;
-		rArr.push(oMySql.connection_middleware);
+	if (props.auth || props.roles) { // middleware for authorising user's jwt token;
+		rArr.push(auth);
 	}
 
-	if (auth) { // jwt token middleware;
-		if (connection) {
-			rArr.push(oUser.auth_middleware);
-		} else {
-			rArr.splice(2); // removing all other middlewares except default;
-			rArr.push((req, res)=> {
-				res.errorToUi({m: [`Route must have 'connection' middleware to activate auth middleware!`]});
-			});
-		}
+	if (props.roles) { // role middleware;
+		rArr.push(role.bind(this, props));
 	}
 
-	if (roles) { // role middleware;
-		if (auth) { // auth middleware available;
-			rArr.push((req, res, next)=> {
-				oUser.role_middleware(req, res, next, roles);
-			});
-		} else { // auth middleware must be available;
-			rArr.splice(2); // removing all other middlewares except default;
-			rArr.push((req, res)=> {
-				res.errorToUi({m: [`Route must have 'auth' middleware to activate role middleware!`]});
-			});
-		}
-	}
-
-	rArr.push((req, res)=> { // main execute;
+	rArr.push((req, res)=> { // main execute assigned to route;
 		if (execute) {
 			try {
 				execute(req, res);
@@ -62,9 +42,21 @@ function registerRoute({ app, url, type, props }) {
 		}
 	});
 
-	app[type].apply(app, rArr);
+	app[type].apply(app, rArr); // adding to express route;
+
 };
 
-module.exports = {
-	registerRoutes
+/**
+ * regestring all api endpoints;
+ * @param {Object}: {app: ExpressApp, BASE_URL: '*'}
+ */
+module.exports =  function({ app, BASE_URL }) {
+	for (let k in services) { // looping all endpoints;
+		let url = `${BASE_URL}/${k}`; // api url;
+		let types = services[k]; // all api methods for endpoints;
+		for (let type in types) {
+			let props = types[type];
+			registerRoute({ app, url, type, props });
+		};
+	};
 };

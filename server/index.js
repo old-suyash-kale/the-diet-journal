@@ -9,24 +9,20 @@ let bodyParser = require('body-parser');
 let socketIO = require('socket.io');
 
 // configuration;
-require('module-alias/register');
-require('dotenv').config();
-let { PORT, BASE_URL, PUBLIC_HTML } = require('@configs/server');
+require('module-alias/register'); // initializing setting alias;
+require('dotenv').config(); // initializing env vars;
+let { PORT, BASE_URL, PUBLIC_HTML } = require('@configs/server.js');
 
 // custom modules;
-let { registerRoutes } = require('@utils/registerRoutes');
+let registerRoutes = require('@utils/registerRoutes/index.js');
 
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 app.io = io;
 
-console.log('Express app is create;');
-
-io.on('connection',(socket)=> {
-    console.log('io connection');
-    socket.on('disconnect',()=> {
-        console.log('io disconnect');
+io.on('connection',socket=> { // on ws connection establish;
+    socket.on('disconnect',()=> { // on disconnect ws connection;
     });
 });
 
@@ -39,11 +35,10 @@ server.listen(PORT, ()=> {
   console.log(`Server is up and running on port ${PORT};`);
 });
 
-// routes registered;
-registerRoutes({ app, BASE_URL });
+registerRoutes({ app, BASE_URL }); // registering routes;
 
+// setting up public dir;
 app.use(express.static(path.join(__dirname, `../${PUBLIC_HTML}`)));
-
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, `../${PUBLIC_HTML}`, 'index.html'));
 });

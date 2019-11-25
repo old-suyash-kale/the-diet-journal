@@ -19,9 +19,8 @@ function signUp({ fname, lname, mobile, email, password }) {
 				if (s === 's') {
 					dispatch(setUser(d));
 					history.push('/');
-				} else {
-					dispatch(busy.hide(ACTION_SIGN_UP));
 				}
+				dispatch(busy.hide(ACTION_SIGN_UP));
 			});
 		}, DELAY);
 	};
@@ -35,9 +34,8 @@ function signIn({ mobile, password }) {
 				if (s === 's') {
 					dispatch(setUser(d));
 					history.push('/');
-				} else {
-					dispatch(busy.hide(ACTION_SIGN_IN));
 				}
+				dispatch(busy.hide(ACTION_SIGN_IN));
 			});
 		}, DELAY);
 	};

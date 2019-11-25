@@ -8,6 +8,7 @@ import { faUserPlus, faPaperPlane, faEye, faEyeSlash } from '@fortawesome/fontaw
 import { CSSTransition } from 'react-transition-group';
 
 import { change, submit, extract } from 'utils/form.js';
+import { ACTION_SIGN_UP } from 'store/user/index.js';
 import { signUp } from 'store/user/actions.js';
 import { TIMEOUT } from 'configs/transition.js';
 
@@ -132,8 +133,8 @@ class SignUp extends Component {
 					mountOnEnter={true}
 					timeout={TIMEOUT}>
 					<Busy
-						type={'USER_SIGNUP'}
-						className={'col-md-4 offset-md-4'}>
+						type={ACTION_SIGN_UP}
+						className={'col-md-4 offset-md-4 mt-5'}>
 						<div
 							className={'card shadow'}>
 							<div
@@ -253,3 +254,7 @@ class SignUp extends Component {
 export default connect(null, {
 	signUp
 })(SignUp);
+
+export {
+	SIGN_UP_FORM_KEY
+};

@@ -8,8 +8,8 @@ import { faSignInAlt, faPaperPlane, faEye, faEyeSlash } from '@fortawesome/fonta
 import { CSSTransition } from 'react-transition-group';
 
 import { change, submit, extract } from 'utils/form.js';
-import { signIn } from 'store/user/actions.js';
 import { ACTION_SIGN_IN } from 'store/user/index.js';
+import { signIn } from 'store/user/actions.js';
 import { TIMEOUT } from 'configs/transition.js';
 
 import Button from 'components/common/Button.jsx';
@@ -24,7 +24,7 @@ class SignIn extends Component {
 			mobile: {
 				Type: 'Input',
 				type: 'number',
-				value: '8889744426',
+				value: '8889644426',
 				required: true,
 				Pattern: /^[0-9]{10,10}$/,
 				PatternMessage: 'Mobile number not valid.',
@@ -35,7 +35,7 @@ class SignIn extends Component {
 			password: {
 				Type: 'Input',
 				type: 'password',
-				value: 'suyash1!',
+				value: 'suyash',
 				required: true,
 				MinLength: 4,
 				MaxLength: 40,

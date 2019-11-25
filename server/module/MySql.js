@@ -1,6 +1,9 @@
 let mysql = require('mysql');
 let SqlString = require('sqlstring');
 
+let { oStore } = require('@modules/Store.js');
+let { dateTimeNow } = require('@utils/index.js');
+
 class MySql {
 
     constructor({ HOST, USER, PASSWORD, DATABASE }) {
@@ -11,50 +14,31 @@ class MySql {
             database: DATABASE
         });
         this.Q = null;
-        
-        this.connection_middleware = this.connection_middleware.bind(this);
         this.query = this.query.bind(this);
+        this.create = this.create.bind(this);
+        this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
     };
 
-    connect() {
-        return new Promise((resolve, reject)=> {
-            if (this.Q) {
-                resolve(this.Q);
-            }
-            this.pool
-            .getConnection((err, Q)=> {
-                if (err) {
-                    reject(err);
-                }
-                this.Q = Q;
-                resolve({ Q });
-            });
-        });
-    };
 
+    /**
+     * releasing connection;
+     */
     release() {
-        if (!this.Q) {
+        if (!this.Q) { // connection never established;
             return;
         }
         this.Q.release();
         this.Q = null;
-        console.log('Connection release with database;');
     };
 
-    connection_middleware(req, res, next) {
-        this.connect().then(({ Q })=> {
-            req.Q = Q;
-            console.log('Connection established with database;');
-            next();
-        }, (err)=> { // need to handle errors;
-            console.log('Connection failed with database;');
-        });
-    };
-
+    /**
+     * executing query;
+     * @param {String} q: query string;
+     */
     query(q) {
-        // return this.Q.query.apply(this.Q, arguments);
         return new Promise((resolve, reject)=> {
-            q = q.replace(/\n/gm, ''); // for removing \n
+            q = q.replace(/\n/gm, ''); // for removing \n (line break);
             this.Q.query(q,(err, rows)=> {
                 if (err) {
                     reject(err);
@@ -65,35 +49,137 @@ class MySql {
         });
     };
 
-    insert(o) {
-        if (o.length) { // array; handle for multiple insert;
+    /**
+     * handling single and multipe create;
+     * @param {Object} o: {table: tableName, values: {columnName: columnvalue}}
+     */
+    create(o) {
+        if (o.length) { // array; handle for multiple create;
             let pArr = [];
             for (let param of o) {
-                pArr.push(this.insert(param));
+                pArr.push(this.create(param));
             };
             return Promise.all(pArr);
-        } else { // single insert;
+        } else { // single create;
             return new Promise((resolve, reject)=> {
                 let { table, values } = o,
                     cns = [], // column names;
                     cvs = []; // column values;
                 for (let cn in values) {
+                    let cv = values[cn];
                     cns.push(cn);
-                    cvs.push(`'${values[cn]}'`);
+                    if (['dt', 'cdt', 'udt'].includes(cn) && !cv) { // handling datetime fields;
+                        cv = dateTimeNow();
+                    }
+                    cvs.push(SqlString.escape(cv));
                 };
                 cns = cns.join(', ');
                 cvs = cvs.join(', ');
-                this.Q.query(`INSERT INTO ${table} (${cns}) VALUES (${cvs})`,(err, o)=> {
+                this.Q.query(`INSERT INTO ${table} (${cns}) VALUES (${cvs})`,(err, row)=> {
                     if (err) {
                         reject(err);
                     } else {
                         let insertId = null;
-                        if (o && o.insertId) {
-                            insertId = o.insertId;
+                        if (row && row.insertId) {
+                            insertId = row.insertId;
                         }
+                        this.add_cud_log(o, 'C');
                         resolve(insertId);
                     }
                 });
+            });
+        }
+    };
+
+    /**
+     * handling single and multipe update;
+     * @param {Object} o: {table: tableName, values: {columnName: columnvalue}, conditions: {columnName: columnvalue}}
+     */
+    update(o) {
+        if (o.length) { // array; handle for multiple update;
+            let pArr = [];
+            for (let param of o) {
+                pArr.push(this.update(param));
+            };
+            return Promise.all(pArr);
+        } else { // single update;
+            return new Promise((resolve, reject)=> {
+                let { table, values, conditions } = o,
+                    sets = [],
+                    c = []; // conditions;
+                for (let cn in values) {
+                    if (['dt', 'cdt', 'udt'].includes(cn) && !values[cn]) {
+                        values[cn] = dateTimeNow();
+                    }
+                    sets.push(`${cn}=${SqlString.escape(values[cn])}`);
+                };
+                for (let cn in conditions) {
+                    let cv = conditions[cn];
+                    c.push(`${cn}=${cv}`);
+                };
+                sets = sets.join(', ');
+                c = c.join(' AND ');
+                this.Q.query(`UPDATE ${table} SET ${sets} WHERE ${c}`,err=> {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        this.add_cud_log(o, 'U');
+                        resolve();
+                    }
+                });
+            });
+        }
+    };
+
+    /**
+     * handling single and multipe delete;
+     * @param {Object} o: {table: tableName, conditions: {columnName: columnvalue}}
+     */
+    delete(o) {
+        if (o.length) { // array; handle for multiple delete;
+            let pArr = [];
+            for (let param of o) {
+                pArr.push(this.delete(param));
+            };
+            return Promise.all(pArr);
+        } else { // single delete;
+            let { table, conditions } = o,
+                c = []; // conditions;
+            for (let cn in conditions) {
+                let cv = conditions[column];
+                c.push(`${cn} EQ ${cv}`);
+            };
+            c = c.join(' AND ');
+            this.Q.query(`DELETE FROM ${table} WHERE ${c}`,err=> {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.add_cud_log(o, 'D');
+                    resolve();
+                }
+            });
+        }
+    };
+
+    /**
+     * adding create, update and delete logs;
+     * @param {Object} o: can we any object from create/ update/ delete;
+     * @param {*} operation: C: create OR U: update OR D: delete;
+     */
+    add_cud_log(o, operation = 'I') {
+        let { table, conditions, values } = o,
+        { user_id } = oStore.getProperty('user');
+        if (!['log_cud', 'log_api'].includes(table)) {
+            this.create({
+                table: 'log_cud',
+                values: {
+                    user_id,
+                    table_name: table,
+                    conditions: JSON.stringify(conditions || {}),
+                    operation,
+                    table_values: JSON.stringify(values || {}),
+                    cdt: null
+                }
             });
         }
     };

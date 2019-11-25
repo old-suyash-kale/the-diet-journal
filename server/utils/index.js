@@ -1,8 +1,14 @@
 let moment = require('moment');
 
+/**
+ * Setting default values in Object;
+ * @param {Object} p: Original Object;
+ * @param {Object} d: values will be dafaulted in the original object;
+ */
 function defaultProps(p, d) {
+    p = Object.assign({}, p);
     for (let k in d) {
-        if (k && !p.hasOwnProperty(k)) {
+        if (k && !p.hasOwnProperty(k)) { // updating only if value is available;
             p[k] = d[k];
         }
     };
@@ -10,7 +16,7 @@ function defaultProps(p, d) {
 };
 
 function dateTimeNow() {
-    return moment().utc().format('YYYY-MM-DD HH:mm:ss');
+    return (new moment()).utc().format('YYYYMMDDHHmmssSSS');
 };
 
 

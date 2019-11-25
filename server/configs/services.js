@@ -1,9 +1,8 @@
-let { oUser } = require('@modules/User');
+let { oUser } = require('@modules/User.js');
 
 module.exports = {
     SignUp: {
         post: {
-            connection: true,
             auth: false,
             expect: {
                 fname: {
@@ -30,7 +29,6 @@ module.exports = {
     },
     SignIn: {
         post: {
-            connection: true,
             auth: false,
             expect: {
                 mobile: {
